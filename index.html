@@ -288,19 +288,56 @@
         render();
     }
 
-    async function syncWithCloud() {
-        if(!db.i.url) return alert("Vlož URL v nastavení!");
-        const btn = document.getElementById('syncBtn');
-        btn.innerText = "..."; btn.disabled = true;
-        try {
-            const resp = await fetch(db.i.url + "?action=load");
-            const cloudData = await resp.json();
-            if(cloudData && (cloudData.f || cloudData.s)) { db = cloudData; save(); }
-            await fetch(db.i.url + "?action=save", { method:'POST', mode:'no-cors', body:JSON.stringify(db) });
-            alert("✅ Cloud Sync Hotov!");
-        } catch(e) { alert("❌ Chyba cloudu."); }
-        btn.innerText = "Cloud Sync"; btn.disabled = false;
-        render();
+   // ZDE DOPLŇ SVÉ ÚDAJE ZE SUPABASE (Project Settings -> API)
+const SUPABASE_URL = "https://cbcrfxhmlknjylckfmtz.supabase.co";
+const SUPABASE_KEY = "sb_publishable_rQEXr6wwdvQAl6mI444xbw_Twsyi8GzY";
+const USER_IDENTIFIER = "moje_auto_id_1"; // Libovolné jméno pro tvá data
+
+async function syncWithCloud() {
+    const btn = document.getElementById('syncBtn');
+    btn.innerText = "⏳ ..."; btn.disabled = true;
+
+    try {
+        // 1. POKUS O STAŽENÍ DAT
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/autos?user_id=eq.${USER_IDENTIFIER}`, {
+            headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
+        });
+        const result = await response.json();
+
+        if (result.length > 0) {
+            // Pokud na serveru data jsou, porovnáme je (jednoduchá synchronizace)
+            if (confirm("Na cloudu jsou data. Chceš je stáhnout do mobilu? (OK = stáhnout, Zrušit = přepsat cloud těmito daty)")) {
+                db = result[0].data;
+                save();
+                render();
+                alert("✅ Data stažena!");
+                btn.innerText = "Cloud Sync"; btn.disabled = false;
+                return;
+            }
+        }
+
+        // 2. ODESLÁNÍ DAT NA CLOUD (Upsert - vloží nebo aktualizuje)
+        await fetch(`${SUPABASE_URL}/rest/v1/autos`, {
+            method: 'POST',
+            headers: { 
+                "apikey": SUPABASE_KEY, 
+                "Authorization": `Bearer ${SUPABASE_KEY}`,
+                "Content-Type": "application/json",
+                "Prefer": "resolution=merge-duplicates" 
+            },
+            body: JSON.stringify({
+                user_id: USER_IDENTIFIER,
+                data: db
+            })
+        });
+
+        alert("✅ Data bezpečně uložena v Supabase cloudu!");
+    } catch (e) {
+        console.error(e);
+        alert("❌ Chyba spojení se Supabase.");
+    }
+    btn.innerText = "Cloud Sync"; btn.disabled = false;
+}
     }
 
     function save() { localStorage.setItem('autoMasterDB', JSON.stringify(db)); }
