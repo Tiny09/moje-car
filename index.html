@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>AutoLog Elite</title>
+    <title>AutoLog Elite Pro</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -21,7 +21,6 @@
 
         body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; color: var(--text); -webkit-font-smoothing: antialiased; padding-bottom: env(safe-area-inset-bottom); }
 
-        /* RESPONSIVE CONTAINER: Na PC širší, na mobilu 100% */
         .container { max-width: 1000px; margin: 0 auto; min-height: 100vh; position: relative; }
 
         header { padding: 40px 20px 10px; display: flex; justify-content: space-between; align-items: flex-end; }
@@ -35,18 +34,15 @@
         .content { padding: 15px 20px; }
         .section { display: none; animation: fadeIn 0.3s ease-out; }
         .section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* CSS GRID PRO PC i MOBIL */
-        .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-        .desktop-split { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; }
-
-        /* TADY SE DĚJE KOUZLO PRO POČÍTAČE (Šířka nad 768px) */
         @media (min-width: 768px) {
-            .status-grid { grid-template-columns: 1fr 1fr 1fr 1fr; } /* 4 karty vedle sebe */
-            .desktop-split { grid-template-columns: 1fr 1fr; } /* Formulář vlevo, historie vpravo */
+            .status-grid { grid-template-columns: 1fr 1fr 1fr 1fr; } 
+            .desktop-split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
             header, nav, .content { padding-left: 40px; padding-right: 40px; }
         }
+
+        .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .desktop-split { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; }
 
         .status-card { background: var(--glass); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); padding: 20px; border-radius: 24px; display: flex; flex-direction: column; justify-content: space-between; }
         .status-card span { font-size: 10px; font-weight: 700; color: var(--sub); text-transform: uppercase; }
@@ -55,17 +51,36 @@
         .card { background: white; padding: 25px; border-radius: 30px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
         h3 { margin: 0 0 20px 0; font-size: 18px; font-weight: 800; }
 
-        label { display: block; font-size: 11px; font-weight: 700; color: var(--sub); margin-bottom: 6px; text-transform: uppercase; }
-        input, select, textarea { width: 100%; padding: 14px; margin-bottom: 18px; border: 1px solid #e5e7eb; border-radius: 16px; background: #f9fafb; font-size: 15px; box-sizing: border-box; font-family: inherit; }
-        .btn-add { width: 100%; background: var(--primary); color: white; border: none; padding: 18px; border-radius: 20px; font-weight: 700; cursor: pointer; font-family: inherit; transition: 0.2s; }
+        label { display: block; font-size: 11px; font-weight: 700; color: var(--sub); margin-bottom: 6px; text-transform: uppercase; padding-left: 5px;}
+        input, select, textarea { 
+            width: 100%; padding: 14px; margin-bottom: 18px; border: 1px solid #e5e7eb; 
+            border-radius: 16px; background: #f9fafb; font-size: 15px; box-sizing: border-box; font-family: inherit;
+        }
+        
+        .btn-add { width: 100%; background: var(--primary); color: white; border: none; padding: 18px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .btn-add:hover { background: #333; }
 
-        .entry { display: flex; justify-content: space-between; align-items: center; padding: 18px; background: white; border-radius: 22px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); border: 1px solid #f1f5f9; }
-        .tag { padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; color: white; }
+        .entry { display: flex; justify-content: space-between; align-items: center; padding: 18px; background: white; border-radius: 22px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .entry-info b { display: block; font-size: 15px; font-weight: 700; }
+        .entry-info span { font-size: 12px; color: var(--sub); }
+        .entry-val { font-weight: 800; font-size: 16px; text-align: right; }
+
+        .tag { padding: 4px 10px; border-radius: 8px; font-size: 9px; font-weight: 800; color: white; text-transform: uppercase; }
 
         #syncBtn { background: #34c759; color: white; border: none; padding: 8px 15px; border-radius: 15px; font-weight: 700; font-size: 12px; cursor: pointer; transition: 0.2s; }
         #syncBtn:hover { transform: scale(1.05); }
-        .chart-container { max-width: 400px; margin: 0 auto; }
+
+        .mini-badge { display: inline-block; padding: 2px 5px; font-size: 9px; font-weight: bold; color: white; border-radius: 4px; vertical-align: middle;}
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* TABULKA PŮJČKY DESKTOP ONLY */
+        .loan-summary-table { width: 100%; border-collapse: separate; border-spacing: 0; margin-bottom: 20px; font-size: 12px;}
+        .loan-summary-table th { text-align: left; padding: 10px; color: var(--sub); text-transform: uppercase; font-weight: 700; border-bottom: 1px solid #eee;}
+        .loan-summary-table td { padding: 10px; border-bottom: 1px solid #f9f9f9; font-weight: 600;}
+        .loan-summary-table tr:last-child td { border-bottom: none;}
+
+        .expense-badge { border-radius: 6px; padding: 3px 6px; color: white; font-weight: bold; font-size: 10px; margin-right: 5px;}
     </style>
 </head>
 <body>
@@ -80,24 +95,32 @@
     </header>
     
     <nav>
-        <button onclick="tab('dash')" id="t-dash" class="active">PŘEHLED</button>
-        <button onclick="tab('fuel')" id="t-fuel">PALIVO</button>
-        <button onclick="tab('service')" id="t-service">SERVIS</button>
-        <button onclick="tab('loan')" id="t-loan">ÚVĚR</button>
-        <button onclick="tab('info')" id="t-info">NASTAVENÍ</button>
+        <button onclick="tab('dash')" id="t-dash" class="active">📊 PŘEHLED</button>
+        <button onclick="tab('fuel')" id="t-fuel">⛽ PALIVO</button>
+        <button onclick="tab('service')" id="t-service">🛠️ SERVIS</button>
+        <button onclick="tab('other')" id="t-other">📦 OSTATNÍ</button>
+        <button onclick="tab('loan')" id="t-loan">💰 ÚVĚR</button>
+        <button onclick="tab('info')" id="t-info">⚙️ NASTAVENÍ</button>
     </nav>
 
     <div class="content">
         <div id="dash" class="section active">
             <div class="status-grid">
                 <div class="status-card" id="stkCard"><span>STK KONČÍ ZA</span><b id="stkVal">-- dní</b></div>
-                <div class="status-card" id="oilCard"><span>VÝMĚNA OLEJE</span><b id="oilVal">-- km</b></div>
+                <div class="status-card" id="oilCard"><span>OLEJ ZA</span><b id="oilVal">-- km</b></div>
                 <div class="status-card" style="background:var(--primary); color:white;"><span>SPOTŘEBA</span><b id="consVal">0.0 L</b></div>
                 <div class="status-card" style="background:#eef2ff;"><span>CENA / 1KM</span><b id="costKmVal" style="color:var(--accent)">0 Kč</b></div>
             </div>
-            <div class="card chart-container">
-                <h3 style="text-align: center;">Struktura výdajů</h3>
-                <canvas id="mainChart"></canvas>
+            
+            <div class="desktop-split">
+                <div class="card">
+                    <h3>Struktura výdajů</h3>
+                    <div style="max-width: 300px; margin: 0 auto;"><canvas id="mainChart"></canvas></div>
+                </div>
+                <div class="card" style="background:transparent; box-shadow:none; padding:10px 0 0;">
+                    <h3>Celkem uhrazeno dle skupin</h3>
+                    <div id="expenseSummaryList"></div>
+                </div>
             </div>
         </div>
 
@@ -107,11 +130,11 @@
                     <h3>Zapsat tankování</h3>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
                         <div><label>Datum</label><input type="date" id="fDate"></div>
-                        <div><label>Tachometr</label><input type="number" id="fOdo"></div>
+                        <div><label>Tachometr (km)</label><input type="number" id="fOdo" placeholder="km"></div>
                     </div>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                        <div><label>Litrů</label><input type="number" id="fLiters"></div>
-                        <div><label>Cena Celkem</label><input type="number" id="fPrice"></div>
+                        <div><label>Litrů</label><input type="number" id="fLiters" placeholder="0.00"></div>
+                        <div><label>Cena Celkem (Kč)</label><input type="number" id="fPrice" placeholder="0"></div>
                     </div>
                     <button class="btn-add" onclick="add('fuel')">Uložit tankování</button>
                 </div>
@@ -122,174 +145,262 @@
         <div id="service" class="section">
             <div class="desktop-split">
                 <div class="card">
-                    <h3>Nový servisní záznam</h3>
-                    <label>Popis opravy</label><input type="text" id="sDesc" placeholder="Např. výměna oleje">
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <h3>Servisní záznam</h3>
+                    <label>Co se dělalo?</label><input type="text" id="sDesc" placeholder="Např. Výměna brzd">
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
                         <div><label>Datum</label><input type="date" id="sDate"></div>
-                        <div><label>Cena (Kč)</label><input type="number" id="sPrice"></div>
+                        <div><label>km</label><input type="number" id="sOdo" placeholder="Tachometr"></div>
+                        <div><label>Cena Kč</label><input type="number" id="sPrice" placeholder="0"></div>
                     </div>
-                    <button class="btn-add" onclick="add('service')">Uložit servis</button>
+                    <label>Poznámka</label><textarea id="sNote" rows="2"></textarea>
+                    <button class="btn-add" onclick="add('service')" style="background:#0f172a">Uložit servis</button>
                 </div>
                 <div id="serviceList"></div>
             </div>
         </div>
 
-        <div id="loan" class="section">
-            <div class="status-grid" style="grid-template-columns: 1fr 1fr;">
-                <div class="status-card" style="border-bottom: 4px solid var(--boy)"><span>PLATÍM JÁ</span><b id="boyVal">0 Kč</b></div>
-                <div class="status-card" style="border-bottom: 4px solid var(--girl)"><span>ONA</span><b id="girlVal">0 Kč</b></div>
-            </div>
+        <div id="other" class="section">
             <div class="desktop-split">
                 <div class="card">
-                    <h3>Nová splátka</h3>
-                    <label>Kdo platí?</label>
-                    <select id="lWho"><option value="Já">Já</option><option value="Přítelkyně">Přítelkyně</option></select>
-                    <label>Částka (Kč)</label>
-                    <input type="number" id="lVal">
-                    <button class="btn-add" onclick="add('loan')">Uložit splátku</button>
+                    <h3>Ostatní výdaje</h3>
+                    <label>Druh výdaje</label>
+                    <select id="oCat"><option value="Pojištění">Pojištění (Povinné/Havarijní)</option><option value="Pneumatiky">Pneumatiky</option><option value="STK">STK / Emise</option><option value="Úřad">Úřad / Přepis auta</option><option value="Myčka">Myčka / Autokosmetika</option><option value="Dálniční známka">Dálniční známka</option><option value="Jiné">Jiné (Doplňky...)</option></select>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                        <div><label>Datum</label><input type="date" id="oDate"></div>
+                        <div><label>Částka (Kč)</label><input type="number" id="oPrice" placeholder="0"></div>
+                    </div>
+                    <label>Poznámka</label><input type="text" id="oNote">
+                    <button class="btn-add" onclick="add('other')" style="background:#64748b">Uložit výdaj</button>
+                </div>
+                <div id="otherList"></div>
+            </div>
+        </div>
+
+        <div id="loan" class="section">
+            <div class="card" style="padding: 10px;">
+                <table class="loan-summary-table" id="loanSummaryTable">
+                    <thead><tr><th>Jméno</th><th>Uhrazeno akontace</th><th>Uhrazeno jistina</th><th>Uhrazeno úroky</th><th>Celkem</th><th>Podíl</th><th>Zbývá do cíle</th></tr></thead>
+                    <tbody id="loanSummaryBody"></tbody>
+                </table>
+            </div>
+            
+            <div class="desktop-split">
+                <div class="card">
+                    <h3>Nová složená splátka</h3>
+                    <label>Kdo platí?</label><select id="lWho"><option id="lOptA" value="A">Osoba A</option><option id="lOptB" value="B">Osoba B</option></select>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                        <div><label>Datum</label><input type="date" id="lDate"></div>
+                        <div><label>Celkem zaplaceno Kč</label><input type="number" id="lTotalVal"></div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; background:#f9f9f9; padding: 10px; border-radius:10px; margin-bottom: 15px;">
+                        <div><label style="font-size:9px">Z toho Akontace Kč</label><input type="number" id="lAkonPart" style="margin:0"></div>
+                        <div><label style="font-size:9px">Z toho Jistina Kč</label><input type="number" id="lPrincipalPart" style="margin:0"></div>
+                        <div><label style="font-size:9px">Z toho Úrok Kč</label><input type="number" id="lInterestPart" style="margin:0"></div>
+                    </div>
+                    <label>Poznámka</label><input type="text" id="lNote">
+                    <button class="btn-add" onclick="add('loan')">Potvrdit složenou splátku</button>
                 </div>
                 <div id="loanList"></div>
             </div>
         </div>
 
         <div id="info" class="section">
-            <div class="card">
-                <h3>Vozidlo a parametry</h3>
-                <div class="desktop-split">
-                    <div>
-                        <label>Model auta</label><input type="text" id="iMod" onchange="saveCfg()">
-                        <label>SPZ</label><input type="text" id="iSpz" onchange="saveCfg()">
-                        <label>Příští STK</label><input type="date" id="iStk" onchange="saveCfg()">
+            <div class="desktop-split">
+                <div class="card">
+                    <h3>Vozidlo a parametry</h3>
+                    <label>Název auta</label><input type="text" id="iMod" onchange="saveCfg()">
+                    <label>SPZ</label><input type="text" id="iSpz" onchange="saveCfg()">
+                    <label>Olej limit km (příští výměna)</label><input type="number" id="iOil" onchange="saveCfg()">
+                    <label>Datum příští STK</label><input type="date" id="iStk" onchange="saveCfg()">
+                </div>
+                <div class="card">
+                    <h3>Konfigurace financování (dle screenu)</h3>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                        <div><label>Jméno Osoba A</label><input type="text" id="iNameA" placeholder="Např. Eli" onchange="saveCfg()"></div>
+                        <div><label>Jméno Osoba B</label><input type="text" id="iNameB" placeholder="Např. Luky" onchange="saveCfg()"></div>
                     </div>
-                    <div>
-                        <label>Limit Olej (Tachometr km)</label><input type="number" id="iOil" onchange="saveCfg()">
-                        <label>Úvěr Celkem (Původní cena v Kč)</label><input type="number" id="lTotal" onchange="saveCfg()">
-                        <button onclick="exportJSON()" style="width:100%; padding:15px; margin-top:10px; background:var(--bg); border:1px solid #ddd; border-radius:15px; color:var(--text); font-weight:bold; cursor:pointer;">💾 Uložit zálohu na disk</button>
+                    <label>Celková cena auta Kč</label><input type="number" id="iCarPriceTotal" onchange="saveCfg()">
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; background:#eee; padding:10px; border-radius:10px; margin-top:5px;">
+                        <div><label>Cílová Akontace Celkem Kč</label><input type="number" id="iAkonTotalGoal" style="margin:0" onchange="saveCfg()"></div>
+                        <div><label>Cílová Jistina Úvěru Kč</label><input type="number" id="iPrincipalTotalGoal" style="margin:0" onchange="saveCfg()"></div>
                     </div>
                 </div>
             </div>
+            <div class="card" style="border: 2px solid #34c759;"><h3>☁️ Supabase Cloud (Google Disk náhrada)</h3><label>Project URL</label><input type="text" id="scriptUrl" placeholder="https://..." onchange="saveCfg()"><label>Project API Key</label><input type="text" id="scriptKey" placeholder="anon key..." onchange="saveCfg()"><p style="font-size:11px; color:var(--sub)">Vlož Project URL a anon public Key ze Supabase setting. Pak dej Sync nahoře.</p></div>
+            <button onclick="exportJSON()" style="width:100%; padding:15px; border:none; background:none; color:var(--sub); font-size:12px;">💾 Stáhnout lokální zálohu (JSON)</button>
         </div>
     </div>
 </div>
 
 <script>
     // --- DOPLŇ SVÉ SUPABASE ÚDAJE ZDE ---
-    const SUPABASE_URL = "https://cbcrfxhmlknjylckfmtz.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_rQEXr6wwdvQAl6mI444xbw_Twsyi8Gz";
-    const USER_ID = "moje_auto_elite_1";
+    const DEFAULT_SUPABASE_URL = "https://cbcrfxhmlknjylckfmtz.supabase.co";
+    const DEFAULT_SUPABASE_KEY = "sb_publishable_rQEXr6wwdvQAl6mI444xbw_Twsyi8Gz";
+    const USER_ID = "moje_auto_elite_pro_1";
 
-    let db = JSON.parse(localStorage.getItem('autoMasterDB')) || { f:[], s:[], l:{ t:0, a:0, m:0, h:[] }, i:{} };
+    // Data struktura byla změněna pro nové funkce
+    let db = JSON.parse(localStorage.getItem('autoMasterDB')) || { f:[], s:[], o:[], l:{ h:[] }, i:{ url:DEFAULT_SUPABASE_URL, key:DEFAULT_SUPABASE_KEY, nA:"Eli", nB:"Luky", pT:0, agG:0, pgG:0 } };
     let chart = null;
 
     function tab(name) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
         document.getElementById(name).classList.add('active');
-        document.getElementById('t-' + name).classList.add('active');
+        document.getElementById('t-'+name).classList.add('active');
         if(name === 'dash') render();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo(0, 0);
+    }
+
+    // Načte údaje ze Supabase do DB configu při startu
+    function loadSyncParams(){
+        if(db.i.url === DEFAULT_SUPABASE_URL && val('scriptUrl')) db.i.url = val('scriptUrl');
+        if(db.i.key === DEFAULT_SUPABASE_KEY && val('scriptKey')) db.i.key = val('scriptKey');
     }
 
     function saveCfg() {
-        db.i = { m: val('iMod'), s: val('iSpz'), oil: num('iOil'), stk: val('iStk') };
-        db.l.t = num('lTotal');
+        db.i = { m: val('iMod'), s: val('iSpz'), oil: num('iOil'), stk: val('iStk'), url: val('scriptUrl'), key: val('scriptKey'), nA: val('iNameA')||"Eli", nB: val('iNameB')||"Luky", pT: num('iCarPriceTotal'), agG: num('iAkonTotalGoal'), pgG: num('iPrincipalTotalGoal') };
         save(); render();
     }
 
     function add(type) {
         const id = Date.now();
         if(type==='fuel') db.f.push({ id, d:val('fDate'), o:num('fOdo'), l:num('fLiters'), p:num('fPrice') });
-        if(type==='service') db.s.push({ id, d:val('sDate'), desc:val('sDesc'), p:num('sPrice') });
-        if(type==='loan') db.l.h.push({ id, who:val('lWho'), p:num('lVal'), d:new Date().toLocaleDateString('cs-CZ') });
+        if(type==='service') db.s.push({ id, d:val('sDate'), desc:val('sDesc'), o:num('sOdo'), p:num('sPrice'), n:val('sNote') });
+        if(type==='other') db.o.push({ id, d:val('oDate'), cat:val('oCat'), p:num('oPrice'), n:val('oNote') });
+        if(type==='loan') {
+            const whoRaw = val('lWho');
+            db.l.h.push({ id, d:val('lDate')||new Date().toLocaleDateString('cs-CZ'), whoA:whoRaw==="A", t:num('lTotalVal'), ak:num('lAkonPart'), pr:num('lPrincipalPart'), int:num('lInterestPart'), n:val('lNote') });
+        }
         save(); render();
-        ['fOdo','fLiters','fPrice','sDesc','sPrice','lVal'].forEach(i => { if(document.getElementById(i)) document.getElementById(i).value=''; });
+        ['fPrice','fLiters','fOdo','sDesc','sPrice','sOdo','sNote','oPrice','oNote','lTotalVal','lAkonPart','lPrincipalPart','lInterestPart','lNote'].forEach(i => { if(document.getElementById(i)) document.getElementById(i).value=''; });
     }
 
     function remove(type, id) {
         if(!confirm('Opravdu smazat záznam?')) return;
-        if(type==='loan') db.l.h = db.l.h.filter(x=>x.id!==id);
-        else if(type==='fuel') db.f = db.f.filter(x=>x.id!==id);
-        else if(type==='service') db.s = db.s.filter(x=>x.id!==id);
+        db[type.charAt(0)] = db[type.charAt(0)].filter(x=>x.id!==id);
         save(); render();
     }
 
     async function syncWithCloud() {
-        if(SUPABASE_URL === "VLOZ_SVOJI_URL") return alert("Nejdříve vlož Supabase údaje do kódu!");
+        loadSyncParams();
+        if(!db.i.url || db.i.url === DEFAULT_SUPABASE_URL) return alert("Vlož URL v nastavení!");
         const btn = document.getElementById('syncBtn');
-        btn.innerText = "⏳..."; btn.disabled = true;
+        btn.innerText = "..."; btn.disabled = true;
         try {
-            const resp = await fetch(`${SUPABASE_URL}/rest/v1/autos?user_id=eq.${USER_ID}`, {
-                headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
+            const resp = await fetch(`${db.i.url}/rest/v1/autos?user_id=eq.${USER_ID}`, {
+                headers: { "apikey": db.i.key, "Authorization": `Bearer ${db.i.key}` }
             });
             const result = await resp.json();
-            if (result.length > 0 && confirm("Data jsou na cloudu. Stáhnout do zařízení? (Zrušit = Přepsat cloud daty z tohoto zařízení)")) {
-                db = result[0].data; save(); render();
+            if (result.length > 0 && confirm("Stáhnout data z cloudu? (Zrušit = Přepsat cloud daty z mobilu)")) {
+                db = result[0].data; save(); render(); alert("✅ Staženo z cloudu!");
             } else {
-                await fetch(`${SUPABASE_URL}/rest/v1/autos`, {
+                await fetch(`${db.i.url}/rest/v1/autos`, {
                     method: 'POST',
-                    headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}`, "Content-Type": "application/json", "Prefer": "resolution=merge-duplicates" },
+                    headers: { "apikey": db.i.key, "Authorization": `Bearer ${db.i.key}`, "Content-Type": "application/json", "Prefer": "resolution=merge-duplicates" },
                     body: JSON.stringify({ user_id: USER_ID, data: db })
                 });
-                alert("✅ Cloud úspěšně aktualizován!");
+                alert("✅ Nahráno na cloud (Supabase)!");
             }
-        } catch (e) { alert("❌ Chyba spojení."); }
+        } catch (e) { alert("❌ Chyba cloudu. Zkontroluj nastavení."); }
         btn.innerText = "Cloud Sync"; btn.disabled = false;
+        render();
     }
 
     function save() { localStorage.setItem('autoMasterDB', JSON.stringify(db)); }
 
     function render() {
-        document.getElementById('carNameHead').innerText = db.i.m || 'Moje Auto';
+        // Sync Inputs v nastavení a jména v úvěru
+        document.getElementById('carNameHead').innerText = db.i.m || 'Moje Auto Elite';
         document.getElementById('carPlateHead').innerText = db.i.s || 'SPZ ---';
-        document.getElementById('iMod').value = db.i.m || '';
-        document.getElementById('iSpz').value = db.i.s || '';
-        document.getElementById('iOil').value = db.i.oil || '';
-        document.getElementById('iStk').value = db.i.stk || '';
-        document.getElementById('lTotal').value = db.l.t || '';
+        document.getElementById('iMod').value = db.i.m || ''; document.getElementById('iSpz').value = db.i.s || ''; document.getElementById('iOil').value = db.i.oil || ''; document.getElementById('iStk').value = db.i.stk || ''; document.getElementById('scriptUrl').value = db.i.url || ''; document.getElementById('scriptKey').value = db.i.key || ''; document.getElementById('iNameA').value = db.i.nA; document.getElementById('iNameB').value = db.i.nB; document.getElementById('iCarPriceTotal').value = db.i.pT; document.getElementById('iAkonTotalGoal').value = db.i.agG; document.getElementById('iPrincipalTotalGoal').value = db.i.pgG;
+        
+        // Jména v option úvěru
+        document.getElementById('lOptA').innerText = db.i.nA; document.getElementById('lOptB').innerText = db.i.nB;
 
-        let lastOdo = db.f.length > 0 ? Math.max(...db.f.map(x=>x.o)) : 0;
+        let lastOdo = 0;
+        if(db.f.length > 0) lastOdo = Math.max(lastOdo, ...db.f.map(x=>x.o));
+        if(db.s.length > 0) lastOdo = Math.max(lastOdo, ...db.s.map(x=>x.o));
+
         if(db.i.stk) {
             const diff = Math.ceil((new Date(db.i.stk) - new Date()) / 86400000);
             document.getElementById('stkVal').innerText = diff > 0 ? diff + ' dní' : 'Prošlá!';
-            document.getElementById('stkCard').style.background = diff < 30 ? '#fee2e2' : 'var(--glass)';
+            document.getElementById('stkCard').style.background = diff < 30 ? 'var(--girl)' : 'var(--glass)';
         }
         if(db.i.oil && lastOdo) {
             const diff = db.i.oil - lastOdo;
             document.getElementById('oilVal').innerText = diff + ' km';
-            document.getElementById('oilCard').style.background = diff < 1000 ? '#fee2e2' : 'var(--glass)';
+            document.getElementById('oilCard').style.background = diff < 1000 ? 'var(--girl)' : 'var(--glass)';
         }
 
-        let fT = db.f.reduce((s,x)=>s+x.p,0), sT = db.s.reduce((s,x)=>s+x.p,0), lP = db.l.h.reduce((s,x)=>s+x.p,0);
+        // Totals pro Dashboard
+        let fT = db.f.reduce((s,x)=>s+x.p,0);
+        let sT = db.s.reduce((s,x)=>s+x.p,0);
+        let oT = db.o.reduce((s,x)=>s+x.p,0);
+        let lT = db.l.h.reduce((s,x)=>s+x.t,0); // Celkem splátky úvěru
+
         if(db.f.length > 1) {
             const sorted = [...db.f].sort((a,b)=>a.o-b.o);
             const dist = sorted[sorted.length-1].o - sorted[0].o;
-            const lts = sorted.slice(1).reduce((s,x)=>s+x.l, 0);
+            const lts = sorted.slice(1).reduce((s,x)=>s+x.l,0);
             document.getElementById('consVal').innerText = dist > 0 ? ((lts/dist)*100).toFixed(1) + ' L' : '0.0 L';
-            document.getElementById('costKmVal').innerText = dist > 0 ? ((fT+sT+lP)/dist).toFixed(0) + ' Kč' : '0 Kč';
+            document.getElementById('costKmVal').innerText = dist > 0 ? ((fT+sT+oT+lT)/dist).toFixed(0) + ' Kč' : '0 Kč';
         }
-
-        renderList('fuelList', db.f, x=>`${x.l} L • ${x.o} km`, x=>x.p, 'fuel');
-        renderList('serviceList', db.s, x=>x.desc, x=>x.p, 'service');
         
-        let b=0, g=0; const lL = document.getElementById('loanList'); lL.innerHTML = '';
-        db.l.h.sort((a,b)=>b.id-a.id).forEach(x => {
-            if(x.who==='Já') b+=x.p; else g+=x.p;
-            lL.innerHTML += `<div class="entry"><div><span class="tag" style="background:${x.who==='Já'?'var(--boy)':'var(--girl)'}">${x.who}</span> <b>${x.p} Kč</b><br><small>${x.d}</small></div><button onclick="remove('loan',${x.id})" style="border:none; background:none; color:var(--danger); font-size:24px; cursor:pointer;">×</button></div>`;
-        });
-        document.getElementById('boyVal').innerText = b.toLocaleString() + ' Kč';
-        document.getElementById('girlVal').innerText = g.toLocaleString() + ' Kč';
+        // Sumář výdajů na Dashboardu
+        document.getElementById('expenseSummaryList').innerHTML = `
+            <div class="entry" style="padding:10px;"><b style="color:#007aff">⛽ PALIVO</b><b>${fT.toLocaleString()} Kč</b></div>
+            <div class="entry" style="padding:10px;"><b style="color:#1a1a1a">🛠️ SERVIS</b><b>${sT.toLocaleString()} Kč</b></div>
+            <div class="entry" style="padding:10px;"><b style="color:#64748b">📦 OSTATNÍ</b><b>${oT.toLocaleString()} Kč</b></div>
+            <div class="entry" style="padding:10px;"><b style="color:#cbd5e1">💰 ÚVĚR/PŮJČKA (Splátky)</b><b>${lT.toLocaleString()} Kč</b></div>
+            <div class="entry" style="padding:15px; background:var(--bg);"><b>CELKOVÉ VÝDAJE AUTA</b><b style="font-size:18px;">${(fT+sT+oT+lT).toLocaleString()} Kč</b></div>
+        `;
 
+        // Render Listů
+        renderList('fuelList', db.f, x=>`${x.l} L • ${x.o} km`, x=>x.p, 'fuel');
+        renderList('serviceList', db.s, x=>`${x.desc} | <span class="mini-badge" style="background:#444">${x.o||'--'} km</span>`, x=>x.p, 'service', true);
+        renderList('otherList', db.o, x=>x.cat, x=>x.p, 'other', true);
+        
+        // --- ÚVĚR LOGIKA DLE SCREENU ---
+        let aSumAk=0, aSumPr=0, aSumInt=0, bSumAk=0, bSumPr=0, bSumInt=0;
+        const lL = document.getElementById('loanList'); lL.innerHTML = '<h3>Historie splátek</h3>';
+        db.l.h.sort((a,b)=>b.id-a.id).forEach(x => {
+            if(x.whoA){ aSumAk+=x.ak; aSumPr+=x.pr; aSumInt+=x.int;}
+            else{ bSumAk+=x.ak; bSumPr+=x.pr; bSumInt+=x.int;}
+            lL.innerHTML += `<div class="entry"><div><span class="tag" style="background:${x.whoA?'var(--boy)':'var(--girl)'}">${x.whoA?db.i.nA:db.i.nB}</span> <b>${x.t} Kč</b><br><small>${x.d} | Ak: ${x.ak} / Jist: ${x.pr} / Úr: ${x.int} | ${x.n||''}</small></div><button onclick="remove('loan',${x.id})" style="border:none; background:none; color:red; font-size:24px; cursor:pointer;">×</button></div>`;
+        });
+        
+        document.getElementById('boyVal').innerText = (aSumAk+aSumPr).toLocaleString() + ' Kč'; // Uhrazeno jistina na screenu
+        document.getElementById('girlVal').innerText = (bSumAk+bSumPr).toLocaleString() + ' Kč';
+
+        // Summary Tabulka
+        const pA_ag = aSumAk, pA_pg = aSumPr, pA_ig = aSumInt, pA_total = pA_ag+pA_pg+pA_ig;
+        const pB_ag = bSumAk, pB_pg = bSumPr, pB_ig = bSumInt, pB_total = pB_ag+pB_pg+pB_ig;
+        
+        // Výpočty pro podíl a zbývá (předpokládáme sdílení celkové ceny napůl, nebo dle cílových částek)
+        // Screen ukazuje podíl 176 268 u Eli, celková cena 352 536. Je to napůl.
+        const share = db.i.pT / 2; // Cílový podíl každého (jistina + akontace)
+        const remA = share - pA_ag - pA_pg;
+        const remB = share - pB_ag - pB_pg;
+
+        document.getElementById('loanSummaryBody').innerHTML = `
+            <tr><td>${db.i.nA} (Osoba A)</td><td>${pA_ag.toLocaleString()} Kč</td><td>${pA_pg.toLocaleString()} Kč</td><td>${pA_ig.toLocaleString()} Kč</td><td>${pA_total.toLocaleString()} Kč</td><td>${share.toLocaleString()} Kč</td><td style="color:${remA<=0?'var(--success)':'var(--danger)'}">${remA.toLocaleString()} Kč</td></tr>
+            <tr><td>${db.i.nB} (Osoba B)</td><td>${bSumAk.toLocaleString()} Kč</td><td>${bSumPr.toLocaleString()} Kč</td><td>${bSumInt.toLocaleString()} Kč</td><td>${bSumTotal.toLocaleString()} Kč</td><td>${share.toLocaleString()} Kč</td><td style="color:${remB<=0?'var(--success)':'var(--danger)'}">${remB.toLocaleString()} Kč</td></tr>
+        `;
+        // Oprava variable bug
+        const bSumTotal = pB_total;
+
+        // Dashboard graf
         if(chart) chart.destroy();
         chart = new Chart(document.getElementById('mainChart'), {
-            type:'doughnut', data:{labels:['Palivo','Servis','Úvěr'], datasets:[{data:[fT,sT,lP], backgroundColor:['#007aff','#1a1a1a','#cbd5e1'], borderWidth:0}]},
-            options:{cutout:'70%', plugins:{legend:{position:'bottom'}}}
+            type:'doughnut', data:{labels:['⛽ Palivo','🛠️ Servis','📦 Ostatní','💰 Úvěr'], datasets:[{data:[fT,sT,oT,lT], backgroundColor:['#007aff','#1a1a1a','#64748b','#cbd5e1'], borderWidth:0}]},
+            options:{cutout:'70%', plugins:{legend:{display:false}}}
         });
     }
 
-    function renderList(id, data, titleFn, valFn, char) {
+    function renderList(id, data, titleFn, valFn, char, hasNote=false) {
         const el = document.getElementById(id); el.innerHTML = '';
         data.sort((a,b)=>b.id-a.id).forEach(x => {
-            el.innerHTML += `<div class="entry"><div><b>${titleFn(x)}</b><br><small>${x.d||''}</small></div><div><b style="font-size:16px;">${valFn(x)} Kč</b> <button onclick="remove('${char}',${x.id})" style="border:none; background:none; color:var(--danger); margin-left:15px; font-size:24px; cursor:pointer;">×</button></div></div>`;
+            el.innerHTML += `<div class="entry"><div><b>${titleFn(x)}</b><br><small>${x.d||''} ${hasNote && x.n ? '| '+x.n : ''}</small></div><div><b>${valFn(x)} Kč</b> <button onclick="remove('${char}',${x.id})" style="border:none; background:none; color:red; margin-left:15px; font-size:24px; cursor:pointer;">×</button></div></div>`;
         });
     }
 
@@ -297,7 +408,7 @@
     function num(i) { return Number(document.getElementById(i).value); }
     function exportJSON() {
         const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(db)], {type:'application/json'}));
-        a.download = 'auto_backup.json'; a.click();
+        a.download = 'auto_elite_pro_backup.json'; a.click();
     }
     render();
 </script>
